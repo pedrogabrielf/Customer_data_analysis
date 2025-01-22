@@ -6,181 +6,180 @@
 # E-mail: pedrofons8@gmail.com
 
 
-## Visão Geral
+## Overview
 
-O projeto tem como objetivo realizar uma análise de dados extraídos do Salesforce, processando e transformando os dados usando Python e SQL, para gerar insights valiosos que possam apoiar decisões de negócios. Este README descreve as etapas realizadas nas partes 1, 2, 3 e 4 do projeto, com ênfase em análise exploratória, transformação de dados, visualizações e insights para a empresa.
+The project aims to analyze data extracted from Salesforce, processing and transforming the data using Python and SQL to generate valuable insights that can support business decisions. This README outlines the steps taken in parts 1, 2, 3, and 4 of the project, focusing on exploratory analysis, data transformation, visualizations, and insights for the company.
 
-## O projeto foi dividido nas seguintes partes:
+## The project was divided into the following parts:
 
-### Parte 1: Data Exploration
-	•	Carregar e explorar os dados dos dois datasets fornecidos (df_accounts e df_support_cases), para entender sua estrutura, conteúdo e identificar inconsistências, valores nulos e outras características importantes.
+### Part 1: Data Exploration
+	• I load and explore the data from the two provided datasets (df_accounts and df_support_cases), to understand their structure, content and identify inconsistencies, null values ​​and other important characteristics.
 
-### Parte 2: Data Processing
-	•	Usar Python e SQL para juntar os datasets e derivar métricas significativas para os negócios. A ênfase foi dada ao uso de SQL para agregações e transformações.
+### Part 2: Data Processing
+	• Use Python and SQL to join datasets and derive meaningful business metrics. Emphasis was placed on using SQL for aggregations and transformations.
 
-### Parte 3: Data Visualization
-	•	Criar visualizações utilizando bibliotecas Python como Matplotlib, Seaborn e Plotly, com base nos KPIs definidos, para apresentar insights valiosos e facilitar a interpretação dos dados.
+### Part 3: Data Visualization
+	• Created visualizations using Python libraries such as Matplotlib, Seaborn and Plotly, based on the defined KPIs, to present valuable insights and facilitate data interpretation.
 
-### Parte 4: Business Insights
-	•	Derivar insights chave dos dados e propor recomendações acionáveis que possam ser aplicadas no contexto de negócios.
+### Part 4: Business Insights
+	• Derive key insights from data and propose actionable recommendations that can be applied in a business context.
 
-# Parte 1: Data Exploration  - df_accounts
-		•	Total de linhas: 1.415
-		•	Total de colunas: 5 (após criarmos algumas colunas auxiliares para análise, mantivemos as colunas originais intactas).
-		•	Colunas originais:
-		1.	account_sfid
-		2.	account_name
-		3.	account_created_date
-		4.	account_country
-		5.	account_industry
+# Part 1: Data Exploration  - df_accounts
+		• I used the main functions for general analysis such as .head() .info() .sum() .isnull() duplicated() describe() value_counts()
+		• Total rows: 1,415
+		• Total columns: 5 (after creating some auxiliary columns for analysis, we kept the original columns intact).
+		• Original columns:
+			1.	account_sfid
+			2.	account_name
+			3.	account_created_date
+			4.	account_country
+			5.	account_industry
 
-	## Análises por Coluna
+	## Analysis by Column
 	### account_sfid
-		•	Descrição: Identificador único de cada conta.
-		•	Verificamos duplicatas (.duplicated().sum()) e valores nulos (.isnull().sum()): ambos retornaram 0, confirmando que todos os IDs são únicos e não há valores ausentes.
-		•	Todos os valores possuem 64 caracteres, indicando padronização do sistema de origem (Salesforce).
+		• Description: Unique identifier for each account.
+		• We checked for duplicates (.duplicated().sum()) and null values ​​(.isnull().sum()): both returned 0, confirming that all IDs are unique and there are no missing values.
+		• All values ​​are 64 characters long, indicating standardization by the source system (Salesforce).
 
-	Conclusão: Nenhuma alteração necessária. A coluna está íntegra e consistente.
+	Conclusion: No changes needed. The column is intact and consistent.
 
 	### account_name
-		•	Descrição: Nome descritivo da conta.
-		•	Verificamos quantidade de nomes únicos e valores nulos: 1.414 nomes únicos para 1.415 registros (há 1 duplicata). Nenhum valor nulo.
-		•	O formato dos nomes segue um padrão tipo "Customer_<ID>", todos com 17 caracteres.
-		•	Decidimos não alterar o nome duplicado, pois o account_sfid é a chave primária e permanece único.
+		• Description: Descriptive name of the account.
+		• We checked the number of unique names and null values: 1,414 unique names for 1,415 records (there is 1 duplicate). No null values.
+		• The format of the names follows a "Customer_<ID>" pattern, all with 17 characters.
+		• We decided not to change the duplicate name, since account_sfid is the primary key and remains unique.
 
-	Conclusão: Coluna sem problemas críticos. Documentada a duplicidade, mas mantive como está.
+	Conclusion: Column without critical problems. Duplication documented, but kept as is.
 
 	### account_created_date
-		•	Descrição: Data de criação da conta.
-		•	Convertida para datetime (pd.to_datetime()).
-		•   Criamos 3 colunas para separar, ano, mes, dia da semana.
-		•	Não há valores nulos.
-		•	Descobrimos que as datas variam de 2007 até 2025, com apenas 1 registro em 2025 (possível dado de teste ou entrada futura).
-		•	Identificamos alta criação de contas em alguns anos e meses (por exemplo, picos em novembro).
+		• Description: Account creation date.
+		• Converted to datetime (pd.to_datetime()).
+		• We created 3 columns to separate, year, month, day of the week.
+		• There are no null values.
+		• We found that dates range from 2007 to 2025, with only 1 record in 2025 (possible test data or future input).
+		• We identified high account creation in some years and months (e.g. peaks in November).
 
-	Conclusão: A conversão para datetime foi suficiente.
+	Conclusion: Conversion to datetime was sufficient.
 
 	### account_country
-		•	Descrição: País de cadastro da conta.
-		•	Encontramos 7 valores nulos.
-		•	Existem 72 países diferentes.
-		•	Principais países: Estados Unidos (553), China (73), Canadá (68), etc.
+		• Description: Country where the account was registered.
+		• We found 7 null values.
+		• There are 72 different countries.
+		• Main countries: United States (553), China (73), Canada (68), etc.
 
-	Conclusão: Decidimos preencher (fillna("Unknown")) os 7 nulos com "Unknown" para manter consistência e não perder registros.
+	Conclusion: We decided to fill (fillna("Unknown")) the 7 nulls with "Unknown" to maintain consistency and not lose records.
 
 	### account_industry
-		•	Descrição: Indústria ou segmento a que a conta pertence.
-		•	Encontramos 13 valores nulos.
-		•	Existência de 22 indústrias diferentes.
-		•	Principais: Pharmaceuticals (421), Printing (265), Packaging and Containers (252), etc.
+		• Description: Industry or segment to which the account belongs.
+		• We found 13 null values.
+		• Existence of 22 different industries.
+		• Main: Pharmaceuticals (421), Printing (265), Packaging and Containers (252), etc.
 
-	Conclusão: Preenchemos os 13 valores nulos com "Unknown".
+	Conclusion: We filled the 13 null values ​​with "Unknown".
 
-	### Transformações Realizadas
+	### Transformations Performed
 
-	Tratamento de Valores Nulos
-		•	account_country: Substituímos 7 valores nulos por "Unknown".
-		•	account_industry: Substituímos 13 valores nulos por "Unknown".
+	Handling Null Values
+		• account_country: We replaced 7 null values ​​with "Unknown".
+		• account_industry: We replaced 13 null values ​​with "Unknown".
 
-	Conversão de Tipos de Dados
-		•	account_created_date: Convertido de object para datetime64[ns].
+	Data Type Conversion
+		•	account_created_date: Converted from object to datetime64[ns].
 
 
 # Parte 1: Data Exploration  - df_support_cases
 
-Através do comando df_support_cases.info(), observamos:
-	•	Total de Colunas: 16 (ex.: case_sfid, account_sfid, case_number, case_created_date, etc.)
-	•	Total de Registros: 10k
+	Using the df_support_cases.info() command, we can see:
+		• Total Columns: 16 (e.g.: case_sfid, account_sfid, case_number, case_created_date, etc.)
+		• Total Records: 10k
 
-Principais Colunas
-	1.	case_sfid - Identificador único do caso.
-	2.	account_sfid - Identificador da conta associada.
-	3.	case_number - Número do caso, usado para referência.
-	4.	case_created_date - Data de criação do caso.
-	5.	case_closed_date - Data de fechamento do caso, se houver.
-	6.	case_status, case_priority, case_severity, case_reason, case_type, case_category - Metadados que descrevem a natureza e a urgência do caso.
+Main Columns
+	1. case_sfid - Unique identifier for the case.
+	2. account_sfid - Associated account identifier.
+	3. case_number - Case number, used for reference.
+	4. case_created_date - Date the case was created.
+	5. case_closed_date - Date the case was closed, if any.
+	6. case_status, case_priority, case_severity, case_reason, case_type, case_category - Metadata describing the nature and urgency of the case.
 
-# Análises Realizadas
-	1.	Verificação de Valores Nulos
-		•	Através de df_support_cases.isnull().sum(), identificamos:
-		•	account_sfid: 1593 valores nulos.
-		•	case_closed_date: 942 valores nulos.
-		•	Demais colunas: 0 valores nulos.
-	2.	Tratamento de account_sfid Nulo
-		•	Decidimos padronizar os casos sem conta vinculada com o valor "Unknown".
+# Analysis Performed
+	1. Checking for Null Values
+		• Using df_support_cases.isnull().sum(), we identified:
+		• account_sfid: 1593 null values.
+		• case_closed_date: 942 null values.
+		• Other columns: 0 null values.
+	2. Handling Null account_sfid
+		• We decided to standardize cases without a linked account with the value "Unknown".
 
-# Frequência de Valores (value_counts)
-	•	Para a maioria das colunas categóricas (ex.: case_status, case_priority, case_reason, case_type, case_category)
+# Frequency of Values ​​(value_counts)
+	• For most categorical columns (e.g. case_status, case_priority, case_reason, case_type, case_category)
 
-# Observações Adicionais
-	•	case_closed_date Nulo: Interpretamos como “caso em aberto”. Optamos por manter esses valores nulos, pois não há data de fechamento
-	•	Consistência com o Dataset de Contas: O uso de account_sfid como chave (mesmo que algumas linhas estejam agora marcadas como "Unknown") será crucial na integração (JOIN) com o dataset de contas na próxima fase do projeto.
-	•	Futura Análise de Métricas: Com datas em formato datetime, será possível calcular o tempo médio de resolução (para casos fechados) e acompanhar tendências de abertura de casos por período.
-
+# Additional Notes
+	• case_closed_date Null: We interpret this as “open case”. We chose to keep these values ​​null, since there is no closing date
+	• Consistency with the Accounts Dataset: The use of account_sfid as a key (even though some rows are now marked as "Unknown") will be crucial in the integration (JOIN) with the accounts dataset in the next phase of the project.
+	• Future Metrics Analysis: With dates in datetime format, it will be possible to calculate the average resolution time (for closed cases) and track case opening trends by period.
 
 # Parte 2: Data Processing
 Insights:
 
-	1. Número de Casos por País
-		Insight: Identificamos os países com maior demanda de suporte. Países com mais casos indicam maior necessidade de recursos ou processos de suporte mais complexos, podendo ser alvos de ações específicas.
+	1.  Number of Cases by Country
+		- Discover in which countries support is most demanded. This helps the business understand where there is the greatest need for service or possible recurring problems by region.
 
-	2. Número de Casos por Indústria
-		Insight: Determinamos quais indústrias demandam mais suporte, ajudando a priorizar esforços de suporte especializado ou desenvolvimento de soluções personalizadas para indústrias com maior volume de casos.
+	2. Number of Cases by Industry
+		- Reveals which sectors require the most support. Useful for prioritizing specialized support teams or developing specific solutions for certain industries.
 
-	3. Número de Casos por Conta (Top 5)
-		Insight: Descobrimos as contas mais exigentes em termos de suporte, permitindo direcionar esforços para essas contas, que podem precisar de um atendimento mais intensivo ou preventivo.
+	3. Number of Cases per Account (TOP 5)
+		- Identifies the 5 most active accounts in support. These accounts can be important customers or customers with a lot of problems. This guides the support team in planning proactive actions.
 
-	4. Tempo Médio de Resolução por Conta
-		Insight: Identificamos as contas com o maior tempo médio de resolução, revelando áreas onde o suporte pode estar sendo ineficiente ou onde mais recursos podem ser necessários.
+	4. Average Resolution Time per Account
+		- Measures in days how long it takes, on average, to resolve cases for each account. Allows you to compare:
+		- Accounts with high resolution times, which may be unsatisfied.
 
-	5. Distribuição de Casos por Severidade
-		Insight: A análise da severidade dos casos mostrou quais níveis de severidade predominam, permitindo otimizar a alocação de recursos de acordo com a urgência dos casos.
+	5. Distribution of Cases by Severity
+		- Allows you to know the predominant level of severity in cases, helping the support team to scale efforts (e.g., if the majority are of high severity, more resource allocation is needed).
 
-	6. Distribuição de Casos por Prioridade
-		Insight: Identificamos a distribuição dos casos por prioridade, o que pode ajudar a ajustar a alocação de recursos de forma mais eficiente, priorizando casos de alta urgência.
+	6. Distribution of Cases by Priority
+		- Similar to severity, it identifies how urgent most cases are. If many cases are “High Priority”, the company may need to review triage processes.
 
-	7. Tempo Médio de Resolução por País
-		Insight: A comparação do tempo médio de resolução entre países revelou quais regiões demandam mais tempo para resolver casos. Isso pode ajudar a identificar ineficiências regionais e melhorar processos de suporte específicos para essas regiões.
+	7. Resolution time per country
+		- Insight: Helps understand regional variations in resolution time. There may be language barriers, time zones, or other factors in certain countries.
 
 # Parte 3: Data Visualization
 
-## Seção 1 – Visão Geral (Gráficos Genéricos)
-	1.1 – Número de casos por país
-	1.2 – Distribuição de casos por país (Pizza – TOP 5 + OUTROS)
-	1.3 – Distribuição de Contas por País
-	1.4 – Número de Contas por País
+## Section 1 - Overview (Generic Charts)
+	1.1 – Number of Cases by Country
+	1.2 – Case Distribution by Country (Pie Chart – TOP 5 + OTHERS)
+	1.3 – Account Distribution by Country
+	1.4 – Number of Accounts by Country
 
-## Seção 2 – Análise de Severidade e Prioridade
-	2.1 – Distribuição de casos por Severidade
-	2.3 – Distribuição de Casos por Prioridade
-	2.4 – Distribuição de Casos Graves por País (EUA Disparado)
-	2.5 – Distribuição de Casos Graves por Indústria nos EUA
+## Section 2 – Severity and Priority Analysis
+	2.1 – Distribution of Cases by Severity
+	2.3 – Distribution of Cases by Priority
+	2.4 – Distribution of Serious Cases by Country (USA)
+	2.5 – Distribution of Serious Cases by Industry in the USA
 
-## Seção 3 - Análise Específica de Indústrias e Tipos de Chamados
+## Section 3 - Specific Analysis of Industries and Type of Calls
+	3.1 – Industries Related to the Top 3 Countries
+	3.2 – Number of Cases by Industry
+	3.3 – Distribution Cases by Type and Severity (Top 10 Types)
+	3.4 – Distribution Cases by Type and Severity (Top 3 Types)
+	3.5 – Average Resolution Time by Industry
+		3.5.1 – Average Resolution Time per year
+	3.6 – Average Resolution Time of Cases in the USA by Year of Account Creation
+	3.7 – Countries with the Longest Resolution Time
+		3.7.1 – Case Distribution by Severity in Countries with the Longest Resolution Time
+	3.8 – Top 10 Accounts with the Longest Average Resolution Time
+	3.9 – Evolution of Accounts Created by Month and Year
+	3.10 – Number of Cases by Accounts (Top 5)
 
-	3.1 - Indústrias Relacionadas ao Top 3 Países
-	3.2 - Número de casos por Indústria
-	3.3 - Distribuição de Casos por Tipo de Chamado e Severidade (Top 10 Tipos)
-	3.4 - Distribuição de Casos por Tipo de Chamado e Severidade (Top 3 Tipos)
-	3.5 - Tempo Médio de Resolução por Indústria
-		3.5.1 - Tempo médio resolução por ano
-	3.6 - Tempo Médio de Resolução de Casos nos Estados Unidos por Ano de Criação das Contas
-	3.7 - Países com maior tempo de resolução
-		3.7.1 - Distribuição de Casos por Severidade nos Países com Maior Tempo de Resolução de Casos
-	3.8 - Top 10 Contas com Maior Tempo Médio de Resolução # REVER SE DEIXO OU NÃO
-	3.9 - Evolução de Contas Criadas por Mês e Ano
-	3.10 - Número de casos por contas (Top 5)
+## Section 4 - Performance and Trend Analysis
+	4.1 – Resolution Time Trend (Average, Maximum, Minimum)
+	4.2 – Severity by Cases
+	4.3 – Distribution of Cases by Country for the Top 3 Industries
+	4.4 – Average, Maximum, and Minimum Resolutions of US Cases with 5 Most Present Industries
+	4.5 – Account Creation Trend until 2030
 
-## Seção 4 - Análise de Performance e Tendência
-
-	4.1 - Tendência de Tempo de Resolução (Média, Máximo, Mínimo)
-	4.2 - Severidade por casos
-	4.3 - Distribuição de Casos por País para as Top 3 Indústrias
-	4.4 - Média, máximo e mínimo resoluções dos casos EUA com 5 indústrias mais presentes
-	4.5 - Tendência de criação de contas até 2030
-
-## Seção 5 - Análise por países com mais contas (EUA, CHINA, CANADA)
-	5.1 - EUA
+## Section 5 - Analysis by countries with the most accounts (USA, CHINA, CANADA)
+	5.1 - USA
 	5.2 - CHINA
 	5.3 - CANADA
 
@@ -189,34 +188,38 @@ Insights:
 
 	1. What are the key insights you derived from the data and visualizations?
 
-		1 - EUA possui a maior demanda de suporte, seguido por china e canadá. 
+		1.1 - USA has the highest demand for support, followed by China and Canada. 
 
-		2 - A tabela abaixo mostra rapidamente o tempo médio de resolução do suporte por tipo de caso nos EUA
+		1.2 - The table below quickly shows the average support resolution time by case type in the US
 
-		| Case Type  | Tempo médio |
+		| Case Type  | Average time |
 		| ------------- | ------------- |
 		| License Activation  | +2 days  |
 		| Software Performance  | +10 days  |
 		| User Access issue | +4 days |
 
-		3 - Top 3 Industrias com mais casos. Farmaceutica, Information Technology e Printing. A tabela abaixo mostra o tempo médio de resolução dos casos de cada um.
+		1.3 - Top 3 Industries with the most cases. Pharmaceuticals, Information Technology and Printing. The table below shows the average resolution time for each case.
 
-		| Industry  | Tempo médio |
+		| Industry  | Average time |
 		| ------------- | ------------- |
 		| Farmaceutica  | +6 days  |
 		| Information Technology  | +-1 day  |
 		| Printing | +5 days |
 
-		4 - Distribuição de Casos Graves: Casos graves são mais prevalentes nos EUA, especialmente na indústria farmacêutica.
+		1.4 - Distribution of Severe Cases: Severe cases are more prevalent in the USA, especially in the pharmaceutical industry.
 
-		5 - Através dos graficos que foram gerados, observa-se que os estados unidos é lider em casos graves, especialmente na indústria farmacêutica, que ademais, possui um tempo médio de resolução de mais de 6 dias, o que é um absurdo e precisa melhorar.
+		1.5 - Through the graphs that were generated, it can be seen that the United States is the leader in serious cases, especially in the pharmaceutical industry, which also has an average resolution time of more than 6 days, which is absurd and needs to be improved.
 
-		6 - Pude observar uma inconsistência na resolução de problemas relacionados a tecnologia. O Canadá tem praticamente casos relacionados a industria da tecnologia que possui um excelente tempo médio de resolução (Aproximadamente 1 dia) porém, os estados unidos que tem dois problemas relacionados a tecnologia, "Software Performace" e "User Access Issue", possuindo respectivamente +10 dias e +4 dias, como são problemas relacionados a tecnologia, deveriam ser resolvidos mais rapidamente !
+		1.6 - I was able to observe an inconsistency in solving technology-related problems. Canada practically has cases related to the technology industry that have an excellent average resolution time (Approximately 1 day), however, the United States has two problems related to technology, "Software Performace" and "User Access Issue", respectively having + 10 days and +4 days, as these are technology-related problems, they should be resolved faster!
 
-		7 - O canadá possui um problema sério na parte de documentar e especificar o tipo de caso que está sendo analisado, falta dado para concluirmos dados melhores.
+		1.7 - Canada has a serious problem in documenting and specifying the type of case being analyzed, there is a lack of data to conclude better data.
+
 
 
 	2. Propose two actionable recommendations that the business could take based on these insights.
-		1.	Alocar Mais Recursos de Suporte para os EUA: A demanda de casos nos EUA é significativamente maior, o que pode justificar o aumento da equipe de suporte ou a automação de processos. 40,2% dos casos são dos EUA, e com uma demora de +10 days para problemas de Software Performance e +4 days para User Access Issue, é nítido que a equipe de T.I precisa urgentemente ser revisada para diminuirmos esse tempo consideravelmente. A industria farmaceutica representa 42,2% dos casos por industria dos estados unidos, e tem um tempo médio de resolução de +6 days, o que demonstra mais uma vez que os EUA tem um sério problema com tempo de resolução dos suportes abertos.
+
+		2.1 Allocate More Support Resources to the US: Case demand in the US is significantly higher, which may justify increasing support staff or automating processes. 40.2% of cases are from the USA, and with a delay of +10 days for Software Performance issues and +4 days for User Access Issues, it is clear that the IT team urgently needs to be revised to reduce this time considerably. The pharmaceutical industry represents 42.2% of cases per industry in the United States, and has an average resolution time of +6 days, which demonstrates once again that the USA has a serious problem with resolution time for open supports.
+
+		2.2 The company must prioritize collecting complete and consistent data for Canada, seeking to fill any gaps in information such as case details, affected sectors and resolution times. One way to do this is to better integrate Canadian support systems with data analytics platforms, ensuring all interactions and metrics are captured correctly. With more data available, it will be possible to analyze further and identify country-specific patterns.
 
 
