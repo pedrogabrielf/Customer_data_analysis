@@ -118,7 +118,7 @@ Main Columns
 	• Consistency with the Accounts Dataset: The use of account_sfid as a key (even though some rows are now marked as "Unknown") will be crucial in the integration (JOIN) with the accounts dataset in the next phase of the project.
 	• Future Metrics Analysis: With dates in datetime format, it will be possible to calculate the average resolution time (for closed cases) and track case opening trends by period.
 
-# Parte 2: Data Processing
+# Parte 2: Data Processing PandaSQL
 Insights:
 
 	1.  Number of Cases by Country
@@ -202,7 +202,7 @@ Insights:
 
 		| Industry  | Average time |
 		| ------------- | ------------- |
-		| Farmaceutica  | +6 days  |
+		| Pharmaceuticals  | +6 days  |
 		| Information Technology  | +-1 day  |
 		| Printing | +5 days |
 
@@ -220,6 +220,6 @@ Insights:
 
 		2.1 Allocate More Support Resources to the US: Case demand in the US is significantly higher, which may justify increasing support staff or automating processes. 40.2% of cases are from the USA, and with a delay of +10 days for Software Performance issues and +4 days for User Access Issues, it is clear that the IT team urgently needs to be revised to reduce this time considerably. The pharmaceutical industry represents 42.2% of cases per industry in the United States, and has an average resolution time of +6 days, which demonstrates once again that the USA has a serious problem with resolution time for open supports.
 
-		2.2 The company must prioritize collecting complete and consistent data for Canada, seeking to fill any gaps in information such as case details, affected sectors and resolution times. One way to do this is to better integrate Canadian support systems with data analytics platforms, ensuring all interactions and metrics are captured correctly. With more data available, it will be possible to analyze further and identify country-specific patterns.
+		2.2 2. I decided to put this answer here because for a data scientist, the most important thing to have insights and ideas is based on data, so this is essential for analysis. The company must prioritize collecting complete and consistent data for Canada, seeking to fill any gaps in information such as case details, affected sectors and resolution times. One way to do this is to better integrate Canadian support systems with data analytics platforms, ensuring all interactions and metrics are captured correctly. With more data available, it will be possible to analyze further and identify country-specific patterns. The company must prioritize collecting complete and consistent data for Canada, seeking to fill any gaps in information such as case details, affected sectors and resolution times. One way to do this is to better integrate Canadian support systems with data analytics platforms, ensuring all interactions and metrics are captured correctly. With more data available, it will be possible to analyze further and identify country-specific patterns.
 
 
