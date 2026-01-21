@@ -1,10 +1,3 @@
-# README - Data Science Project: Salesforce Data Analysis
-
-# Pedro Gabriel Fonseca
-# Curitiba, Paraná, Brazil
-# (41) 99129-2213
-# E-mail: pedrofons8@gmail.com
-
 
 ## Overview
 
